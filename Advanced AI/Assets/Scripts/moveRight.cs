@@ -9,6 +9,11 @@ public class moveRight : MonoBehaviour
     public float moveMod;
     public float moveModMin;
 
+    bool reachedPos = false;
+    float startTime;
+    float journeyLength;
+    Vector3 newPos;
+
     Rigidbody rb;
 
     // Start is called before the first frame update
@@ -16,18 +21,38 @@ public class moveRight : MonoBehaviour
     {
         moveMod = Random.Range(moveModMin, moveModMax);
         moveMod /= 100;
+        this.transform.rotation = Random.rotation;
+
+        randomPos();
     }
 
     // Update is called once per frame
     void Update()
     {
-        gameObject.transform.position = new Vector3(gameObject.transform.position.x - moveMod, gameObject.transform.position.y, gameObject.transform.position.z);
-
-        if(this.transform.position.x <= -5.4)
+        if (Vector3.Distance(transform.position, newPos) <= 1.0f)
         {
-            gameObject.GetComponentInParent<spawnManager>().x--;
-            Destroy(this);
+            reachedPos = true;
         }
+        
+        if (reachedPos)
+        {
+            reachedPos = false;
+            randomPos();
+        }
+        else
+        {
+            float distCovered = (Time.time - startTime) * moveMod;
+            float fractionOfJourney = distCovered / journeyLength;
+
+            transform.position = Vector3.Lerp(this.transform.position, newPos, fractionOfJourney);
+        }
+    }
+
+    void randomPos()
+    {
+        newPos = new Vector3(Random.Range(-5.0f, 6.0f), Random.Range(-2.0f, 3.7f), Random.Range(-9.0f, 9.0f));
+        startTime = Time.time;
+        journeyLength = Vector3.Distance(transform.position, newPos);
     }
 
     void onCollisionEnter(Collision collision)

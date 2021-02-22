@@ -16,6 +16,7 @@ public class raycastChecking : MonoBehaviour
     [HideInInspector]
     public int hitCount = 0;
 
+    Vector3 destination;
     int mID = 0;
     GameObject randomObj;
     Ray raycast;
@@ -29,13 +30,13 @@ public class raycastChecking : MonoBehaviour
 
         rays = new Ray[9];
         rays[0] = new Ray(transform.position, new Vector3(rayLength, 0.5f, 0.0f));
-        rays[1] = new Ray(transform.position, new Vector3(rayLength, 0.375f, 0.0f));
+        rays[1] = new Ray(transform.position, new Vector3(rayLength, 0.375f, 1.0f));
         rays[2] = new Ray(transform.position, new Vector3(rayLength, 0.25f, 0.0f));
-        rays[3] = new Ray(transform.position, new Vector3(rayLength, 0.125f, 0.0f));
+        rays[3] = new Ray(transform.position, new Vector3(rayLength, 0.125f, 0.5f));
         rays[4] = new Ray(transform.position, new Vector3(rayLength, 0.0f, 0.0f));
-        rays[5] = new Ray(transform.position, new Vector3(rayLength, -0.125f, 0.0f));
+        rays[5] = new Ray(transform.position, new Vector3(rayLength, -0.125f, -0.5f));
         rays[6] = new Ray(transform.position, new Vector3(rayLength, -0.25f, 0.0f));
-        rays[7] = new Ray(transform.position, new Vector3(rayLength, -0.375f, 0.0f));
+        rays[7] = new Ray(transform.position, new Vector3(rayLength, -0.375f, -1.0f));
         rays[8] = new Ray(transform.position, new Vector3(rayLength, -0.5f, 0.0f));
     }
 
@@ -53,10 +54,10 @@ public class raycastChecking : MonoBehaviour
         }
 
         this.GetComponent<Rigidbody>().velocity = FlockingBehaviour();
-        this.transform.rotation.SetEulerRotation(0.0f, 90.0f, 0.0f);
+        //this.transform.rotation.SetEulerRotation(0.0f, 90.0f, 0.0f);
     }
 
-    public Vector2 FlockingBehaviour()
+    public Vector3 FlockingBehaviour()
     {
         List<GameObject> theFlock = flocking.instance.theFlock;
 
@@ -101,7 +102,7 @@ public class raycastChecking : MonoBehaviour
         cohesionVector = (cohesionVector - transform.position);
 
         // Add All vectors together to get flocking
-        Vector2 flockingVector = ((separateVector.normalized * flocking.instance.separationWeight) + (cohesionVector.normalized * flocking.instance.cohesionWeight) + (alignmentVector.normalized * flocking.instance.alignmentWeight));
+        Vector3 flockingVector = ((separateVector.normalized * flocking.instance.separationWeight) + (cohesionVector.normalized * flocking.instance.cohesionWeight) + (alignmentVector.normalized * flocking.instance.alignmentWeight));
 
         return flockingVector;
     }
@@ -117,17 +118,6 @@ public class raycastChecking : MonoBehaviour
 
     void dodgingSomething(GameObject objHit)
     {
-        //if(gameObject.transform.position.y >= 1.008f || gameObject.transform.position.y <= -1.1f)
-        //{
-        //    if(gameObject.transform.position.y >= 1.008f)
-        //    {
-        //        gameObject.transform.position = new Vector3(gameObject.transform.position.x, 0.0f, transform.position.z);
-        //    }
-        //    else
-        //    {
-        //        gameObject.transform.position = new Vector3(gameObject.transform.position.x, 0.0f, transform.position.z);
-        //    }
-        //}
         if(gameObject.transform.position.y <= objHit.transform.position.y)
         {
             float lerpMe = transform.position.y - moveIncrement;
@@ -144,6 +134,38 @@ public class raycastChecking : MonoBehaviour
 
             this.transform.position = new Vector3(transform.position.x, newPos, transform.position.z);
         }
+        else if(gameObject.transform.position.x <= objHit.transform.position.x)
+        {
+            float lerpMe = transform.position.x - moveIncrement;
+
+            float newPos = Mathf.Lerp(transform.position.x, lerpMe, timeToDodge);
+
+            this.transform.position = new Vector3(newPos, transform.position.y, transform.position.z);
+        }
+        else if (gameObject.transform.position.x > objHit.transform.position.x)
+        {
+            float lerpMe = transform.position.x + moveIncrement;
+
+            float newPos = Mathf.Lerp(transform.position.x, lerpMe, timeToDodge);
+
+            this.transform.position = new Vector3(newPos, transform.position.y, transform.position.z);
+        }
+        else if(gameObject.transform.position.z <= objHit.transform.position.z)
+        {
+            float lerpMe = transform.position.z - moveIncrement;
+
+            float newPos = Mathf.Lerp(transform.position.z, lerpMe, timeToDodge);
+
+            this.transform.position = new Vector3(transform.position.x, transform.position.y, newPos);
+        }
+        else if (gameObject.transform.position.z > objHit.transform.position.z)
+        {
+            float lerpMe = transform.position.z + moveIncrement;
+
+            float newPos = Mathf.Lerp(transform.position.z, lerpMe, timeToDodge);
+
+            this.transform.position = new Vector3(transform.position.x, transform.position.y, newPos);
+        }
         else
         {
             Debug.Log("ERROR");
@@ -151,9 +173,18 @@ public class raycastChecking : MonoBehaviour
 
     }
 
+    void randomPos()
+    {
+        destination = new Vector3(Random.Range(-5.0f, 6.0f), Random.Range(-2.0f, 3.7f), Random.Range(-9.0f, 9.0f));
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
-        hitCount++;
+        if(collision.gameObject.tag != "Player")
+        {
+            hitCount++;
+            Debug.Log(collision.gameObject.name.ToString());
+        }
     }
 
     bool collideCheckRays()

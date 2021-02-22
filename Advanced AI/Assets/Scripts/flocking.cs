@@ -35,7 +35,7 @@ public class flocking : MonoBehaviour
 
     public void updateHitCount()
     {
-        int hitCount = int.Parse(hitCountT.text);
+        int hitCount = 0;
 
         for (int i = 0; i < theFlock.Count; i++)
         {
