@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Something
+  - Counter
+  - CounterAgent
   layers:
   - Default
   - TransparentFX

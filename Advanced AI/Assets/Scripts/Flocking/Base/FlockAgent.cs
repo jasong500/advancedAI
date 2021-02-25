@@ -31,6 +31,7 @@ public class FlockAgent : MonoBehaviour
             GameObject temp = GameObject.FindGameObjectWithTag("Counter");
             hitCounter = temp.GetComponent<TextMeshProUGUI>();
         }
+
         if(hitCounterAgent == null)
         {
             GameObject temp = GameObject.FindGameObjectWithTag("CounterAgent");
@@ -51,25 +52,25 @@ public class FlockAgent : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!collision.gameObject.name.Contains("Cube"))
+        if (collision.gameObject.tag.Equals("Respawn"))
+        {
+            //on collision with walls do nothing
+        }
+        else if (collision.gameObject.tag.Equals("Player"))
+        {
+            //on collision with other agent
+            Debug.Log(this.name + " collided with " + collision.gameObject.name);
+            int temp = int.Parse(hitCounterAgent.text);
+            temp++;
+            hitCounterAgent.text = temp.ToString();
+        }
+        else
         {
             //on collision with obstacles
             Debug.Log(collision.gameObject.name);
             int temp = int.Parse(hitCounter.text);
             temp++;
             hitCounter.text = temp.ToString();
-        }
-        else if (collision.gameObject.name.Contains("Agent"))
-        {
-            //on collision with other agent
-            Debug.Log(this.name + " collided with " + collision.gameObject.name);
-            int temp = int.Parse(hitCounter.text);
-            temp++;
-            hitCounter.text = temp.ToString();
-        }
-        else
-        {
-            //do nothing
         }
     }
 }
