@@ -11,11 +11,11 @@ GameObject:
   - component: {fileID: 5060579437945611967}
   - component: {fileID: 5060579437945611966}
   - component: {fileID: 5060579437945611965}
-  - component: {fileID: 5060579437945611963}
   - component: {fileID: 8638206607360299180}
   - component: {fileID: 6870062419667590455}
+  - component: {fileID: 5060579437945611963}
   m_Layer: 0
-  m_Name: Flock Agent
+  m_Name: Flock Agent Black
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: c8bb2609768b3ce4c81d05097bb3c864, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -84,18 +84,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &5060579437945611963
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5060579437945611962}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71952d94546ed81458dc87fe755b6a2b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!135 &8638206607360299180
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -125,3 +113,15 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &5060579437945611963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5060579437945611962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71952d94546ed81458dc87fe755b6a2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
