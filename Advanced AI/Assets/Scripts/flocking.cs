@@ -18,6 +18,7 @@ public class flocking : MonoBehaviour
     public static flocking instance = null;
 
     List<GameObject> mTheFlock = new List<GameObject>();
+    bool needNewPos = false;
 
     void Start()
     {
@@ -31,6 +32,29 @@ public class flocking : MonoBehaviour
     private void Update()
     {
         updateHitCount();
+
+        for(int i = 0; i < mTheFlock.Count; i++)
+        {
+            if (mTheFlock[i].GetComponent<raycastChecking>().reachedDestination && !needNewPos)
+            {
+                needNewPos = true;
+                break;
+            }
+        }
+    }
+
+    public void flockToRandom()
+    {
+        if (needNewPos)
+        {
+            needNewPos = false;
+            Vector3 newPos = mTheFlock[0].GetComponent<raycastChecking>().randomPos();
+
+            for (int i = 0; i < mTheFlock.Count; i++)
+            {
+                mTheFlock[i].GetComponent<raycastChecking>().setDestination(newPos);
+            }
+        }
     }
 
     public void updateHitCount()

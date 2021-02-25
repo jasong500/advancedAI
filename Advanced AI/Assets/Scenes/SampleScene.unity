@@ -1507,7 +1507,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 983d53ca39c054c499b2474b448d44d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mNumberOfEntities: 60
+  mNumberOfEntities: 200
   hitCountT: {fileID: 1287826420}
   prefab: {fileID: 2721580467490071797, guid: bd5aaea0c93d63c449ccb7259f5953be, type: 3}
   separationWeight: 0.8

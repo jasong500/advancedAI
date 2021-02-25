@@ -15,6 +15,8 @@ public class raycastChecking : MonoBehaviour
 
     [HideInInspector]
     public int hitCount = 0;
+    [HideInInspector]
+    public bool reachedDestination = false;
 
     Vector3 destination;
     int mID = 0;
@@ -22,11 +24,14 @@ public class raycastChecking : MonoBehaviour
     Ray raycast;
     Ray[] rays;
     float mRadiusSquaredDistance = 5.0f;
+    GameObject spawnManager;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = this.GetComponent<Rigidbody>();
+
+        spawnManager = GameObject.FindGameObjectWithTag("SpawnManager");
 
         rays = new Ray[9];
         rays[0] = new Ray(transform.position, new Vector3(rayLength, 0.5f, 0.0f));
@@ -53,8 +58,41 @@ public class raycastChecking : MonoBehaviour
             dodgingSomething(randomObj);
         }
 
+        if (reachedDestination)
+        {
+            spawnManager.GetComponent<flocking>().flockToRandom();
+        }
+
+        if (!reachedDestination)
+        {
+            float dist = Vector3.Distance(transform.position, destination);
+
+            if(dist > 1.0f)
+            {
+                StartCoroutine(LerpPosition(destination, 10));
+            }
+            else
+            {
+                reachedDestination = true;
+            }
+        }
+
         this.GetComponent<Rigidbody>().velocity = FlockingBehaviour();
         //this.transform.rotation.SetEulerRotation(0.0f, 90.0f, 0.0f);
+    }
+
+    IEnumerator LerpPosition(Vector3 targetPosition, float duration)
+    {
+        float time = 0;
+        Vector3 startPosition = transform.position;
+
+        while (time < duration)
+        {
+            transform.position = Vector3.Lerp(startPosition, targetPosition, time / duration);
+            time += Time.deltaTime;
+            yield return null;
+        }
+        transform.position = targetPosition;
     }
 
     public Vector3 FlockingBehaviour()
@@ -173,9 +211,14 @@ public class raycastChecking : MonoBehaviour
 
     }
 
-    void randomPos()
+    public Vector3 randomPos()
     {
-        destination = new Vector3(Random.Range(-5.0f, 6.0f), Random.Range(-2.0f, 3.7f), Random.Range(-9.0f, 9.0f));
+        return new Vector3(Random.Range(-5.0f, 6.0f), Random.Range(-2.0f, 3.7f), Random.Range(-9.0f, 9.0f));
+    }
+
+    public void setDestination(Vector3 newDest)
+    {
+        destination = newDest;
     }
 
     private void OnCollisionEnter(Collision collision)
