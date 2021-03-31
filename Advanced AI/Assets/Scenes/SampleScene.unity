@@ -148,7 +148,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 46765016}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -3.74, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1864922953}
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cellPrefab: {fileID: 581119340718686143, guid: 1cc11d5c66e4b634092eafe3247d35ca, type: 3}
   gridSize: {x: 18, y: 9}
-  cellSpacing: 0.5
+  cellSpacing: 0.1
 --- !u!1 &70580866
 GameObject:
   m_ObjectHideFlags: 0
@@ -269,7 +269,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -129, y: -96}
+  m_AnchoredPosition: {x: -105.5, y: -335.2}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &127766921
@@ -412,7 +412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c36299dad6153744487c53454f10de35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 0}
+  enemyPrefab: {fileID: 1137557554973858228, guid: 23b35cf4e624a424cbbf15d1f3304cbb, type: 3}
   enemyMinSpeed: 1.5
   enemyMaxSpeed: 5
   enemyMaxHealth: 20
@@ -423,8 +423,8 @@ MonoBehaviour:
   waveSpawnMultiplier: 1.25
   timeToStartWave: 2
   currentWaveText: {fileID: 127766921}
-  profitPerKill: 250
-  profitPerWave: 1500
+  profitPerKill: 25
+  profitPerWave: 200
 --- !u!1 &385534569
 GameObject:
   m_ObjectHideFlags: 0
@@ -532,7 +532,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.95, y: 4.68, z: -10}
+  m_LocalPosition: {x: 11, y: 4.68, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -572,7 +572,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 219.34595, y: -36}
+  m_AnchoredPosition: {x: 219.34595, y: -28.2}
   m_SizeDelta: {x: 380.6919, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &811977084
@@ -638,7 +638,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -658,7 +658,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 1
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: -73.51166, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -884,18 +884,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb9665dd15f5eb343b041ffce7ba39c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  basicTowerCost: 500
-  notBasicTowerCost: 1500
-  startingCash: 5000
-  basicTowerTower: {fileID: 0}
-  basicTowerProjectile: {fileID: 0}
+  basicTowerCost: 50
+  notBasicTowerCost: 150
+  startingCash: 500
+  basicTowerTower: {fileID: 4931988228248710285, guid: d68407ea924433c42befd5ce1473bfec, type: 3}
+  basicTowerProjectile: {fileID: 2372236584425457564, guid: da8326ddbbd09c54f996705879113d37, type: 3}
   basicTowerProjectileMoveSpeed: 5
   basicTowerRange: 2.5
   basicTowerProjectileLifeSpan: 1.5
   basicTowerDamagePerProjectile: 5
   basicTowerFireRatePerSec: 2
-  notBasicTowerTower: {fileID: 0}
-  notBasicTowerProjectile: {fileID: 0}
+  notBasicTowerTower: {fileID: 6689503578286173792, guid: 61d1f09bd53e3fc498187dd5f7a55af4, type: 3}
+  notBasicTowerProjectile: {fileID: 2372236584425457564, guid: da8326ddbbd09c54f996705879113d37, type: 3}
   notBasicTowerProjectileMoveSpeed: 7.5
   notBasicTowerRange: 4
   notBasicTowerProjectileLifeSpan: 1.5
@@ -938,7 +938,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -129, y: -36}
+  m_AnchoredPosition: {x: -110.4, y: -30.1}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1312916706
@@ -1062,7 +1062,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1371136599}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.1, y: -0.1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
