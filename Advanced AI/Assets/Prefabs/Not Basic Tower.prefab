@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2924950972325699181}
   - component: {fileID: 5259829390392227749}
   m_Layer: 0
-  m_Name: Tower_Minigun
+  m_Name: Not Basic Tower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 3
   m_Sprite: {fileID: -2413806693520163455, guid: 4adeaf2d2b1c7417e89f026626d8264f, type: 3}
-  m_Color: {r: 0.81654423, g: 0.8584906, b: 0, a: 1}
+  m_Color: {r: 0.15966538, g: 0.8679245, b: 0.16005832, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

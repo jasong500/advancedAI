@@ -26,9 +26,9 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.CompareTag("Zombie"))
+        if (col.CompareTag("enemy"))
         {
-            col.GetComponent<ZombieBehaviour>().DealDamage(damageValue);
+            col.GetComponent<EnemyBehavior>().DealDamage(damageValue);
             Destroy(gameObject);
         }
     }

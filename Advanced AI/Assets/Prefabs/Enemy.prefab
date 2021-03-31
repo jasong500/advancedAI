@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 7030732173818793596}
   - component: {fileID: 8582056987863595646}
   m_Layer: 0
-  m_Name: Zombie
-  m_TagString: Zombie
+  m_Name: Enemy
+  m_TagString: enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 5
   m_Sprite: {fileID: 7482667652216324306, guid: db750325989564987a34393247d883b4, type: 3}
-  m_Color: {r: 0.072191626, g: 0.4716981, b: 0, a: 1}
+  m_Color: {r: 0.7735849, g: 0.18227208, b: 0.09852261, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -147,3 +147,4 @@ MonoBehaviour:
   moveSpeed: 5
   seekDestination: {x: 0, y: 0}
   maxHealth: 20
+  enemyManager: {fileID: 0}

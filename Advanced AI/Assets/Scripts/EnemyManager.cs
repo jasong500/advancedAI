@@ -62,10 +62,10 @@ public class EnemyManager : MonoBehaviour
             GameObject enemy = Instantiate(enemyPrefab, spawnPos, Quaternion.identity, transform);
 
             //Set data
-            enemy.GetComponent<ZombieBehaviour>().moveSpeed = moveSpeed;
-            enemy.GetComponent<ZombieBehaviour>().seekDestination = enemySeekLocation;
-            enemy.GetComponent<ZombieBehaviour>().maxHealth = enemyMaxHealth;
-            enemy.GetComponent<ZombieBehaviour>().enemyManager = this;
+            enemy.GetComponent<EnemyBehavior>().moveSpeed = moveSpeed;
+            enemy.GetComponent<EnemyBehavior>().seekDestination = enemySeekLocation;
+            enemy.GetComponent<EnemyBehavior>().maxHealth = enemyMaxHealth;
+            enemy.GetComponent<EnemyBehavior>().enemyManager = this;
 
             numOfEnemiesAlive++;
         }

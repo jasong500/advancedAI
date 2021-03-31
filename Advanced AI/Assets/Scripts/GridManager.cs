@@ -61,15 +61,23 @@ public class GridManager : MonoBehaviour
         //Get all the cells in the radius
         Collider2D[] cells = Physics2D.OverlapCircleAll(origin, range);
 
-        //Apply influence (decreases based on distance from origin)
-        foreach (Collider2D cell in cells)
+        if(cells != null)
         {
-            //Calculate distance away and corresponding influence to add (linearly decreases)
-            Vector2 pos2D = new Vector2(cell.transform.position.x, cell.transform.position.y);
-            float distanceFromOrigin = (pos2D - origin).magnitude;
-            float increaseAmount = maxInfluence - (maxInfluence * (distanceFromOrigin / range));
+            //Apply influence (decreases based on distance from origin)
+            for (int i = 0; i < cells.Length; i++)
+            {
+                //Calculate distance away and corresponding influence to add (linearly decreases)
+                Vector2 pos2D = new Vector2(cells[i].transform.position.x, cells[i].transform.position.y);
+                float distanceFromOrigin = (pos2D - origin).magnitude;
+                float increaseAmount = maxInfluence - (maxInfluence * (distanceFromOrigin / range));
 
-            cell.GetComponent<Cell>().IncreaseCost(Mathf.Abs(increaseAmount));  //Absolute value in case it goes negative
+                cells[i].GetComponent<Cell>().IncreaseCost(Mathf.Abs(increaseAmount));  //Absolute value in case it goes negative
+            }
         }
+        else
+        {
+            Debug.Log("No cells in range????");
+        }
+
     }
 }

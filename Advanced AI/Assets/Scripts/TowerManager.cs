@@ -56,7 +56,7 @@ public class TowerManager : MonoBehaviour
     void Update()
     {
         //GET KEY DOWN - KEYCODE TAB - Change tower type
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.C))
         {
             if (currentTower == TowerType.basicTower)
             {

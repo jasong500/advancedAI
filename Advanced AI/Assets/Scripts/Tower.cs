@@ -30,28 +30,46 @@ public class Tower : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Check if there is a enemy in a cell
-        if (mostInfectedCell.EnemiesInCell > 0)
-            enemyInCell = true;
-        else
-            enemyInCell = false;
+        //by default set the most infected cell to be the first one just incase it's null
+        if(mostInfectedCell == null)
+        {
+            if(cellsInRange != null)
+            {
+                mostInfectedCell = cellsInRange[0];
+            }
+        }
 
-        //Fire on a cooldown
-        if (enemyInCell && canFire)
-            StartCoroutine(AttackCell(mostInfectedCell));
-
-        //Find a new cell with the highest enemy count
-        foreach (Cell cell in cellsInRange)
+        //Find the cell with the highest enemy count
+        for (int i = 0; i < cellsInRange.Count; i++)
         {
             //If a cell has a enemy in it
-            if (cell.EnemiesInCell > 0)
+            if (cellsInRange[i].EnemiesInCell > 0)
             {
                 //See if it is greater than the highest enemy count cell
-                if (cell.EnemiesInCell > mostInfectedCell.EnemiesInCell)
+                if (cellsInRange[i].EnemiesInCell > mostInfectedCell.EnemiesInCell)
                 {
                     //Update the most infected cell
-                    mostInfectedCell = cell;
+                    mostInfectedCell = cellsInRange[i];
                 }
+            }
+        }
+
+        if (mostInfectedCell != null)
+        {
+            //Check if there is a enemy in a cell
+            if (mostInfectedCell.EnemiesInCell > 0)
+            {
+                enemyInCell = true;
+            }
+            else
+            {
+                enemyInCell = false;
+            }
+
+            //Fire on a cooldown
+            if (enemyInCell && canFire)
+            {
+                StartCoroutine(AttackCell(mostInfectedCell));
             }
         }
     }
