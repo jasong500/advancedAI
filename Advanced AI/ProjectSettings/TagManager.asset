@@ -4,9 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Something
-  - Counter
-  - CounterAgent
+  - Zombie
   layers:
   - Default
   - TransparentFX
@@ -14,10 +12,10 @@ TagManager:
   - 
   - Water
   - UI
+  - Cells
   - 
   - 
-  - Impassable
-  - RoughTerrain
+  - 
   - 
   - 
   - 
