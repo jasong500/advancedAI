@@ -36,6 +36,8 @@ public class GridManager : MonoBehaviour
                 Vector2 spawnPos = new Vector2(i + cellSpacing, j + cellSpacing);
                 GameObject newCell = Instantiate(cellPrefab, spawnPos, Quaternion.identity, transform);
                 newCell.GetComponent<Cell>().cost = 0;
+                newCell.GetComponent<Cell>().gridX = i;
+                newCell.GetComponent<Cell>().gridY = j;
                 grid[i, j] = newCell.GetComponent<Cell>();
             }
         }
@@ -120,6 +122,31 @@ public class GridManager : MonoBehaviour
         else
         {
             Debug.Log("No cells in range????");
+        }
+
+    }
+
+    public void RemoveInfluence(Vector2 origin, float range, float maxInfluence)
+    {
+        //Get all the cells in the radius
+        Collider2D[] cells = Physics2D.OverlapCircleAll(origin, range);
+
+        if (cells != null)
+        {
+            //Apply influence (decreases based on distance from origin)
+            for (int i = 0; i < cells.Length; i++)
+            {
+                //Calculate distance away and corresponding influence to add (linearly decreases)
+                Vector2 pos2D = new Vector2(cells[i].transform.position.x, cells[i].transform.position.y);
+                float distanceFromOrigin = (pos2D - origin).magnitude;
+                float decreaseAmount = maxInfluence - (maxInfluence * (distanceFromOrigin / range));
+
+                cells[i].GetComponent<Cell>().DecreaseCost(Mathf.Abs(decreaseAmount));  //Absolute value in case it goes negative
+            }
+        }
+        else
+        {
+            Debug.Log("No cells in range");
         }
 
     }

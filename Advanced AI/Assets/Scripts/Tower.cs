@@ -17,6 +17,7 @@ public class Tower : MonoBehaviour
 
     //Helper data
     Vector2 towerPos;
+    public bool isBasic = false;
     bool canFire = true;
     bool enemyInCell = false;
 
@@ -51,6 +52,10 @@ public class Tower : MonoBehaviour
                     //Update the most infected cell
                     mostInfectedCell = cellsInRange[i];
                 }
+            }
+            else
+            {
+                mostInfectedCell = cellsInRange[0];
             }
         }
 

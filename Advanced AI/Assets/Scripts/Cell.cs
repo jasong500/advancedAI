@@ -15,6 +15,8 @@ public class Cell : MonoBehaviour
     public int hCost;
     public int gridX, gridY, cellX, cellY;
     public bool walkable = true;
+    public bool hasTower = false;
+    public GameObject myTower;
     public List<Cell> myNeighbours;
     public Cell parent;
 
@@ -40,7 +42,21 @@ public class Cell : MonoBehaviour
         cost += increaseAmount;
 
         //Update colour
-        GetComponent<SpriteRenderer>().color = new Color(0f, 1f, 0f, Mathf.Min(1f, cost));
+        GetComponent<SpriteRenderer>().color = new Color(0f, 1f, 0.5f, Mathf.Min(1f, cost));
+    }
+
+    public void DecreaseCost(float decreaseAmount)
+    {
+        cost -= decreaseAmount;
+
+        //Update color
+        GetComponent<SpriteRenderer>().color = new Color(0f, 1f, 0.5f, Mathf.Min(1f, cost));
+
+        if (cost <= 0)
+        {
+            cost = 0;
+            GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
+        }
     }
 
     void OnTriggerEnter2D(Collider2D col)

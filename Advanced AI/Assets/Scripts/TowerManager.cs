@@ -55,7 +55,7 @@ public class TowerManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //GET KEY DOWN - KEYCODE TAB - Change tower type
+        //Change tower type
         if (Input.GetKeyDown(KeyCode.C))
         {
             if (currentTower == TowerType.basicTower)
@@ -70,15 +70,30 @@ public class TowerManager : MonoBehaviour
             }
         }
 
-        //GET MOUSE BUTTON DOWN - 0 - Place tower
+        //Place tower if left click
         if (Input.GetMouseButtonDown(0))
         {
             Vector2 spawnPos = gridManager.GetCellWorldPos(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-            PlaceTower(spawnPos);
+            Cell holdCell = gridManager.GetCellWorldPosEnemy(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            GameObject addTower = holdCell.gameObject;
+            PlaceTower(spawnPos, addTower);
+        }
+
+        //Sell tower if right click
+        if (Input.GetMouseButtonDown(1))
+        {
+            Vector2 spawnPos = gridManager.GetCellWorldPos(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            SellTower(spawnPos);
         }
     }
 
-    void PlaceTower(Vector2 pos)
+    public void incrementCash(int cashToAdd)
+    {
+        currentCash += cashToAdd;
+        cashAmountText.text = "$" + currentCash.ToString();
+    }
+
+    void PlaceTower(Vector2 pos, GameObject addTower)
     {
         //Check current tower and cost
         int cost;
@@ -118,13 +133,16 @@ public class TowerManager : MonoBehaviour
                     basicTower.GetComponent<Tower>().projectileLifeSpan = basicTowerProjectileLifeSpan;
                     basicTower.GetComponent<Tower>().damagePerProjectile = basicTowerDamagePerProjectile;
                     basicTower.GetComponent<Tower>().fireRatePerSec = basicTowerFireRatePerSec;
+                    basicTower.GetComponent<Tower>().isBasic = true;
+                    addTower.GetComponent<Cell>().hasTower = true;
+                    addTower.GetComponent<Cell>().myTower = basicTower;
 
                     //Set the cells the tower has influence over
                     basicTower.GetComponent<Tower>().SetCellsInRange(Physics2D.OverlapCircleAll(pos, basicTowerRange));
 
                     //Pay for it you greedy mf
                     currentCash -= cost;
-                    cashAmountText.text = "$" + currentCash;
+                    cashAmountText.text = "$" + currentCash.ToString();
                 }
                     break;
                 case TowerType.notBasicTower:
@@ -141,6 +159,9 @@ public class TowerManager : MonoBehaviour
                     notBasicTower.GetComponent<Tower>().projectileLifeSpan = notBasicTowerProjectileLifeSpan;
                     notBasicTower.GetComponent<Tower>().damagePerProjectile = notBasicTowerDamagePerProjectile;
                     notBasicTower.GetComponent<Tower>().fireRatePerSec = notBasicTowerFireRatePerSec;
+                    notBasicTower.GetComponent<Tower>().isBasic = false;
+                    addTower.GetComponent<Cell>().hasTower = true;
+                    addTower.GetComponent<Cell>().myTower = notBasicTower;
 
                     //Set the cells the tower has influence over
                     notBasicTower.GetComponent<Tower>().SetCellsInRange(Physics2D.OverlapCircleAll(pos, notBasicTowerRange));
@@ -160,6 +181,26 @@ public class TowerManager : MonoBehaviour
 
     void SellTower(Vector2 pos)
     {
+        //Debug.Log("Selling Tower!!");
 
+        Cell checkForTower = gridManager.GetCellWorldPosEnemy(pos);
+        
+        if (checkForTower.hasTower)
+        {
+            //remove the influence from this tower
+            gridManager.RemoveInfluence(pos, basicTowerRange, 1.0f);
+
+            //destroy the tower and get some money back
+            if (checkForTower.GetComponent<Cell>().myTower.GetComponent<Tower>().isBasic)
+            {
+                incrementCash(15);
+            }
+            else
+            {
+                incrementCash(25);
+            }
+
+            Destroy(checkForTower.GetComponent<Cell>().myTower.GetComponent<SpriteRenderer>());
+        }
     }
 }
