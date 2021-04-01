@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2878140262239875573}
   - component: {fileID: 7030732173818793596}
   - component: {fileID: 8582056987863595646}
+  - component: {fileID: -4483216664148449532}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: enemy
@@ -148,3 +149,21 @@ MonoBehaviour:
   seekDestination: {x: 0, y: 0}
   maxHealth: 20
   enemyManager: {fileID: 0}
+  movePoint: {fileID: 0}
+  stopMovementMask:
+    serializedVersion: 2
+    m_Bits: 0
+  movement: {x: 0, y: 0}
+--- !u!114 &-4483216664148449532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1137557554973858228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9513ad49d9d2a241ae930c588c552ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  manager: {fileID: 0}

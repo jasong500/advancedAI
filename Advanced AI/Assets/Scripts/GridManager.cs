@@ -56,6 +56,49 @@ public class GridManager : MonoBehaviour
         return grid[x, y].transform.position;
     }
 
+    public Cell GetCellWorldPosEnemy(Vector2 enemyPos)
+    {
+        float percentX = enemyPos.x / (gridSize.x);
+        float percentY = enemyPos.y / (gridSize.y);
+
+        //Clamp values from 0 to 1
+        percentX = Mathf.Clamp01(percentX);
+        percentY = Mathf.Clamp01(percentY);
+
+        int x = Mathf.Clamp(Mathf.FloorToInt((gridSize.x) * percentX), 0, gridSize.x - 1);
+        int y = Mathf.Clamp(Mathf.FloorToInt((gridSize.y) * percentY), 0, gridSize.y - 1);
+
+        return grid[x, y];
+    }
+
+    public Cell GetWorldTileByCellPosition(Vector3 worldPosition)
+    {
+        Vector2 cellPosition = GetCellWorldPos(worldPosition);
+        Cell wt = null;
+        for (int x = 0; x < gridSize.x; x++)
+        {
+            for (int y = 0; y < gridSize.y; y++)
+            {
+                if (grid[x, y] != null)
+                {
+                    Cell _wt = grid[x, y].GetComponent<Cell>();
+
+                    // we are interested in walkable cells only
+                    if (_wt.walkable && _wt.cellX == cellPosition.x && _wt.cellY == cellPosition.y)
+                    {
+                        wt = _wt;
+                        break;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }
+        }
+        return wt;
+    }
+
     public void ApplyInfluence(Vector2 origin, float range, float maxInfluence)
     {
         //Get all the cells in the radius

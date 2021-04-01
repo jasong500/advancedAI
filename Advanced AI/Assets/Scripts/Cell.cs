@@ -10,7 +10,30 @@ public class Cell : MonoBehaviour
 
     //Enemies in the cell
     int enemiesInCell = 0;
-    public int EnemiesInCell {  get { return enemiesInCell; } }
+
+    public int gCost;
+    public int hCost;
+    public int gridX, gridY, cellX, cellY;
+    public bool walkable = true;
+    public List<Cell> myNeighbours;
+    public Cell parent;
+
+    public int EnemiesInCell { get { return enemiesInCell; } }
+
+    public Cell(bool _walkable, int _gridX, int _gridY)
+    {
+        walkable = _walkable;
+        gridX = _gridX;
+        gridY = _gridY;
+    }
+
+    public int fCost
+    {
+        get
+        {
+            return gCost + hCost;
+        }
+    }
 
     public void IncreaseCost(float increaseAmount)
     {
