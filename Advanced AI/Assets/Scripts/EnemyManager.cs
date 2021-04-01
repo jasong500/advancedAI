@@ -29,6 +29,7 @@ public class EnemyManager : MonoBehaviour
     int numOfEnemiesToSpawn;
     int numOfEnemiesPrevWave;
     TowerManager towerManager;
+    GridManager gridManager;
 
     // Start is called before the first frame update
     void Start()
@@ -39,6 +40,8 @@ public class EnemyManager : MonoBehaviour
         numOfEnemiesPrevWave = (int)(enemiesPerWave / waveSpawnMultiplier);
 
         towerManager = FindObjectOfType<TowerManager>();
+
+        gridManager = FindObjectOfType<GridManager>();
 
         StartCoroutine(StartNextWave());
     }
@@ -55,19 +58,20 @@ public class EnemyManager : MonoBehaviour
         {
             //Data for the enemy
             float moveSpeed = Random.Range(enemyMinSpeed, enemyMaxSpeed);
-            Vector2 spawnPos = new Vector2(Random.Range(spawnBoundsX.x, spawnBoundsX.y),
-                Random.Range(spawnBoundsY.x, spawnBoundsY.y));
+            Vector2 spawnPos = gridManager.GetCellWorldPos(new Vector2(17.24f, Random.Range(0.0f, 8.0f)));
 
             //Spawn enemy
             GameObject enemy = Instantiate(enemyPrefab, spawnPos, Quaternion.identity, transform);
 
             //Set data
             enemy.GetComponent<EnemyBehavior>().moveSpeed = moveSpeed;
-            enemy.GetComponent<EnemyBehavior>().seekDestination = enemySeekLocation;
+            enemy.GetComponent<EnemyBehavior>().seekDestination = gridManager.GetCellWorldPosEnemy(new Vector2(0.0f, this.transform.position.y));
             enemy.GetComponent<EnemyBehavior>().maxHealth = enemyMaxHealth;
             enemy.GetComponent<EnemyBehavior>().enemyManager = this;
 
             numOfEnemiesAlive++;
+
+            //yield return new WaitForSeconds(2.0f);
         }
 
         numOfEnemiesPrevWave = numOfEnemiesAlive;

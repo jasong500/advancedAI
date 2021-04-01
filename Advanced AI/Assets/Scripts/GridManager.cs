@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
@@ -38,9 +39,188 @@ public class GridManager : MonoBehaviour
                 newCell.GetComponent<Cell>().cost = 0;
                 newCell.GetComponent<Cell>().gridX = i;
                 newCell.GetComponent<Cell>().gridY = j;
+                newCell.GetComponent<Cell>().walkable = true;
+                newCell.GetComponent<Cell>().myNeighbours = getNeighbours(i, j, 0, 0);
                 grid[i, j] = newCell.GetComponent<Cell>();
             }
         }
+    }
+
+    public List<Cell> getNeighbours(int x, int y, int width, int height)
+    {
+        List<Cell> myNeighbours = new List<Cell>();
+
+        if (x > 0 && x < width - 1)
+        {
+            if (y > 0 && y < height - 1)
+            {
+                if (grid[x + 1, y] != null)
+                {
+                    Cell wt1 = grid[x + 1, y].GetComponent<Cell>();
+                    if (wt1 != null) myNeighbours.Add(wt1);
+                }
+
+                if (grid[x - 1, y] != null)
+                {
+                    Cell wt2 = grid[x - 1, y].GetComponent<Cell>();
+                    if (wt2 != null) myNeighbours.Add(wt2);
+                }
+
+                if (grid[x, y + 1] != null)
+                {
+                    Cell wt3 = grid[x, y + 1].GetComponent<Cell>();
+                    if (wt3 != null) myNeighbours.Add(wt3);
+                }
+
+                if (grid[x, y - 1] != null)
+                {
+                    Cell wt4 = grid[x, y - 1].GetComponent<Cell>();
+                    if (wt4 != null) myNeighbours.Add(wt4);
+                }
+            }
+            else if (y == 0)
+            {
+                if (grid[x + 1, y] != null)
+                {
+                    Cell wt1 = grid[x + 1, y].GetComponent<Cell>();
+                    if (wt1 != null) myNeighbours.Add(wt1);
+                }
+
+                if (grid[x - 1, y] != null)
+                {
+                    Cell wt2 = grid[x - 1, y].GetComponent<Cell>();
+                    if (wt2 != null) myNeighbours.Add(wt2);
+                }
+
+                if (grid[x, y + 1] == null)
+                {
+                    Cell wt3 = grid[x, y + 1].GetComponent<Cell>();
+                    if (wt3 != null) myNeighbours.Add(wt3);
+                }
+            }
+            else if (y == height - 1)
+            {
+                if (grid[x, y - 1] != null)
+                {
+                    Cell wt4 = grid[x, y - 1].GetComponent<Cell>();
+                    if (wt4 != null) myNeighbours.Add(wt4);
+                }
+                if (grid[x + 1, y] != null)
+                {
+                    Cell wt1 = grid[x + 1, y].GetComponent<Cell>();
+                    if (wt1 != null) myNeighbours.Add(wt1);
+                }
+
+                if (grid[x - 1, y] != null)
+                {
+                    Cell wt2 = grid[x - 1, y].GetComponent<Cell>();
+                    if (wt2 != null) myNeighbours.Add(wt2);
+                }
+            }
+        }
+        else if (x == 0)
+        {
+            if (y > 0 && y < height - 1)
+            {
+                if (grid[x + 1, y] != null)
+                {
+                    Cell wt1 = grid[x + 1, y].GetComponent<Cell>();
+                    if (wt1 != null) myNeighbours.Add(wt1);
+                }
+
+                if (grid[x, y - 1] != null)
+                {
+                    Cell wt4 = grid[x, y - 1].GetComponent<Cell>();
+                    if (wt4 != null) myNeighbours.Add(wt4);
+                }
+
+                if (grid[x, y + 1] != null)
+                {
+                    Cell wt3 = grid[x, y + 1].GetComponent<Cell>();
+                    if (wt3 != null) myNeighbours.Add(wt3);
+                }
+            }
+            else if (y == 0)
+            {
+                if (grid[x + 1, y] != null)
+                {
+                    Cell wt1 = grid[x + 1, y].GetComponent<Cell>();
+                    if (wt1 != null) myNeighbours.Add(wt1);
+                }
+
+                if (grid[x, y + 1] != null)
+                {
+                    Cell wt3 = grid[x, y + 1].GetComponent<Cell>();
+                    if (wt3 != null) myNeighbours.Add(wt3);
+                }
+            }
+            else if (y == height - 1)
+            {
+                if (grid[x + 1, y] != null)
+                {
+                    Cell wt1 = grid[x + 1, y].GetComponent<Cell>();
+                    if (wt1 != null) myNeighbours.Add(wt1);
+                }
+
+                if (grid[x, y - 1] != null)
+                {
+                    Cell wt4 = grid[x, y - 1].GetComponent<Cell>();
+                    if (wt4 != null) myNeighbours.Add(wt4);
+                }
+            }
+        }
+        else if (x == width - 1)
+        {
+            if (y > 0 && y < height - 1)
+            {
+                if (grid[x - 1, y] != null)
+                {
+                    Cell wt2 = grid[x - 1, y].GetComponent<Cell>();
+                    if (wt2 != null) myNeighbours.Add(wt2);
+                }
+
+                if (grid[x, y + 1] != null)
+                {
+                    Cell wt3 = grid[x, y + 1].GetComponent<Cell>();
+                    if (wt3 != null) myNeighbours.Add(wt3);
+                }
+
+                if (grid[x, y - 1] != null)
+                {
+                    Cell wt4 = grid[x, y - 1].GetComponent<Cell>();
+                    if (wt4 != null) myNeighbours.Add(wt4);
+                }
+            }
+            else if (y == 0)
+            {
+                if (grid[x - 1, y] != null)
+                {
+                    Cell wt2 = grid[x - 1, y].GetComponent<Cell>();
+                    if (wt2 != null) myNeighbours.Add(wt2);
+                }
+                if (grid[x, y + 1] != null)
+                {
+                    Cell wt3 = grid[x, y + 1].GetComponent<Cell>();
+                    if (wt3 != null) myNeighbours.Add(wt3);
+                }
+            }
+            else if (y == height - 1)
+            {
+                if (grid[x - 1, y] != null)
+                {
+                    Cell wt2 = grid[x - 1, y].GetComponent<Cell>();
+                    if (wt2 != null) myNeighbours.Add(wt2);
+                }
+
+                if (grid[x, y - 1] != null)
+                {
+                    Cell wt4 = grid[x, y - 1].GetComponent<Cell>();
+                    if (wt4 != null) myNeighbours.Add(wt4);
+                }
+            }
+        }
+
+        return myNeighbours;
     }
 
     public Vector2 GetCellWorldPos(Vector2 clickPosition)

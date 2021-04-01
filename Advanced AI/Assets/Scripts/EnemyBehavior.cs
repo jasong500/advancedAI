@@ -5,56 +5,60 @@ using UnityEngine;
 public class EnemyBehavior : MonoBehaviour
 {
     public float moveSpeed = 5f;
-    public Vector2 seekDestination;
+    public Cell seekDestination;
     public float maxHealth = 20f;
     public EnemyManager enemyManager;
+    public GridManager gridManager;
 
     Vector3 lastDirection = Vector3.zero;
     bool moveDone = false;
     List<Cell> reachedPathTiles = new List<Cell>();
     List<Cell> path = new List<Cell>();
-    public Transform movePoint;
+    public Vector2 movePoint;
     public LayerMask stopMovementMask;
     public Vector2 movement;
 
     //Private data
     float currentHealth;
+    int index;
 
     // Start is called before the first frame update
     void Start()
     {
+        gridManager = GameObject.FindObjectOfType<GridManager>();
         currentHealth = maxHealth;
-        movePoint.parent = null;
+        seekDestination = gridManager.GetCellWorldPosEnemy(this.transform.position);
+        index = 0;
         setPath();
     }
 
     // Update is called once per frame
     void Update()
     {
-        SetMovementVector();
-
-        transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.fixedDeltaTime);
-
-        if (Vector3.Distance(transform.position, movePoint.position) <= .001f)
+        if(path != null)
         {
-            if (Mathf.Abs(movement.x) == 1f)
+            if(path.Count <= 0)
             {
-                // we add 0.5f to 'y' component of the 'position'
-                // to account the bottom pivot point of the sprite
-                if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(movement.x, 0.5f, 0f), .2f, stopMovementMask))
-                {
-                    movePoint.position += new Vector3(movement.x, 0f, 0f);
-                }
+                Debug.Log("Path[0] Is Null");
             }
-            else if (Mathf.Abs(movement.y) == 1f)
+            else
             {
-                // we add 0.5f to 'y' component of the 'position'
-                // to account the bottom pivot point of the sprite
-                if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0, movement.y + 0.5f, 0f), .2f, stopMovementMask))
-                {
-                    movePoint.position += new Vector3(0f, movement.y, 0f);
-                }
+                movePoint = path[index].transform.position;
             }
+        }
+
+        if (Vector2.Distance(this.transform.position, movePoint) >= 10.0f)
+        {
+            Debug.Log("Path Count: " + path.Count);
+            transform.position = Vector3.MoveTowards(transform.position, movePoint, moveSpeed * Time.fixedDeltaTime);
+        }
+        else if (path[index + 1] != seekDestination)
+        {
+            index++;
+        }
+        else
+        {
+            transform.position = Vector3.MoveTowards(transform.position, seekDestination.transform.position, moveSpeed * Time.fixedDeltaTime);
         }
     }
 
@@ -71,59 +75,62 @@ public class EnemyBehavior : MonoBehaviour
 
     void setPath()
     {
-        path = this.GetComponent<AStarSearch>().findPath();
+        Vector2 tempStart = new Vector2(this.transform.position.x, this.transform.position.y);
+        Cell tempStartCell = gridManager.GetCellWorldPosEnemy(tempStart);
+        Cell tempEndCell = seekDestination;
+        path = this.GetComponent<AStarSearch>().findPath(tempStartCell, tempEndCell);
     }
 
     void SetMovementVector()
     {
-        if (path != null)
-        {
-            if (path.Count > 0)
-            {
-                if (!moveDone)
-                {
-                    Debug.Log("Path Length: " + path.Count);
-                    for (int i = 0; i < path.Count; i++)
-                    {
-                        if (reachedPathTiles.Contains(path[i]))
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            reachedPathTiles.Add(path[i]); 
-                            break;
-                        }
-                    }
+        //if (path != null)
+        //{
+        //    if (path.Count > 0)
+        //    {
+        //        if (!moveDone)
+        //        {
+        //            Debug.Log("Path Length: " + path.Count);
+        //            for (int i = 0; i < path.Count; i++)
+        //            {
+        //                if (reachedPathTiles.Contains(path[i]))
+        //                {
+        //                    continue;
+        //                }
+        //                else
+        //                {
+        //                    reachedPathTiles.Add(path[i]); 
+        //                    break;
+        //                }
+        //            }
 
-                    if(reachedPathTiles[reachedPathTiles.Count - 1] == null)
-                    {
-                        Debug.Log("Reached Path Tiles is null");
-                    }
+        //            if(reachedPathTiles[reachedPathTiles.Count - 1] == null)
+        //            {
+        //                Debug.Log("Reached Path Tiles is null");
+        //            }
 
-                    Cell wt = reachedPathTiles[reachedPathTiles.Count - 1];
+        //            Cell wt = reachedPathTiles[reachedPathTiles.Count - 1];
 
-                    if(wt == null)
-                    {
-                        Debug.Log("WT is null");
-                    }
-                    Debug.Log(wt.ToString() +  " = X POS");
-                    Debug.Log(wt.transform.position.y +  " = Y POS");
-                    Debug.Log("Outputting Math: " + Mathf.Ceil(wt.transform.position.x - transform.position.x) + " = X POS\n" + Mathf.Ceil(wt.transform.position.y - transform.position.y) + " = Y POS");
-                    lastDirection = new Vector3(Mathf.Ceil(wt.transform.position.x - transform.position.x), Mathf.Ceil(wt.transform.position.y - transform.position.y), 0);
-                    if (lastDirection.Equals(Vector3.up)) movement.y = 1;
-                    if (lastDirection.Equals(Vector3.down)) movement.y = -1;
-                    if (lastDirection.Equals(Vector3.left)) movement.x = -1;
-                    if (lastDirection.Equals(Vector3.right)) movement.x = 1;
-                    moveDone = true;
-                }
-                else
-                {
-                    movement = Vector2.zero;
-                    if (Vector3.Distance(transform.position, movePoint.position) <= .001f)
-                        moveDone = false;
-                }
-            }
-        }
+        //            if(wt == null)
+        //            {
+        //                Debug.Log("WT is null");
+        //            }
+        //            Debug.Log(wt.ToString() +  " = X POS");
+        //            Debug.Log(wt.transform.position.y +  " = Y POS");
+        //            Debug.Log("Outputting Math: " + Mathf.Ceil(wt.transform.position.x - transform.position.x) + " = X POS\n" + Mathf.Ceil(wt.transform.position.y - transform.position.y) + " = Y POS");
+        //            lastDirection = new Vector3(Mathf.Ceil(wt.transform.position.x - transform.position.x), Mathf.Ceil(wt.transform.position.y - transform.position.y), 0);
+        //            if (lastDirection.Equals(Vector3.up)) movement.y = 1;
+        //            if (lastDirection.Equals(Vector3.down)) movement.y = -1;
+        //            if (lastDirection.Equals(Vector3.left)) movement.x = -1;
+        //            if (lastDirection.Equals(Vector3.right)) movement.x = 1;
+        //            moveDone = true;
+        //        }
+        //        else
+        //        {
+        //            movement = Vector2.zero;
+        //            if (Vector3.Distance(transform.position, movePoint.position) <= .001f)
+        //                moveDone = false;
+        //        }
+    //        }
+    //    }
     }
 }

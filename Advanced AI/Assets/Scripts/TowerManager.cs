@@ -190,6 +190,9 @@ public class TowerManager : MonoBehaviour
             //remove the influence from this tower
             gridManager.RemoveInfluence(pos, basicTowerRange, 1.0f);
 
+            //
+            checkForTower.hasTower = false;
+
             //destroy the tower and get some money back
             if (checkForTower.GetComponent<Cell>().myTower.GetComponent<Tower>().isBasic)
             {

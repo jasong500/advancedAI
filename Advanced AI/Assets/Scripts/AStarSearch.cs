@@ -18,19 +18,9 @@ public class AStarSearch : MonoBehaviour
         {
             Debug.Log("FUCK, GRID MANAGER IS NULL");
         }
-
-        if(manager.GetCellWorldPosEnemy((new Vector2(17.24f, this.transform.position.y))) != null)
-        {
-            startPos = manager.GetCellWorldPosEnemy(new Vector2(17.24f, this.transform.position.y));
-
-            if(manager.GetCellWorldPosEnemy((new Vector2(0.0f, this.transform.position.y))) != null)
-            {
-                endPos = manager.GetCellWorldPosEnemy(new Vector2(0.0f, this.transform.position.y));
-            }
-        }
     }
 
-    public  List<Cell> findPath()
+    public  List<Cell> findPath(Cell startPos, Cell endPos)
     {
         return FindPath(startPos, endPos);
     }
@@ -62,9 +52,7 @@ public class AStarSearch : MonoBehaviour
             if (currentNode == targetNode)
             {
                 RetracePath(startNode, targetNode);
-                Debug.Log("Returning After Trace");
-                Debug.Log("Length of Path = " + closedSet.Count);
-                return openSet;
+                return closedSet;
             }
 
             foreach (Cell neighbour in currentNode.myNeighbours)
