@@ -4,62 +4,40 @@ using UnityEngine;
 
 public class EnemyBehavior : MonoBehaviour
 {
+    //public vars
     public float moveSpeed = 5f;
-    public Cell seekDestination;
-    public float maxHealth = 20f;
+    public float maxHealth = 30f;
     public EnemyManager enemyManager;
-    public GridManager gridManager;
+    //[HideInInspector]
+    public Vector2 seekDestination;
 
-    Vector3 lastDirection = Vector3.zero;
-    bool moveDone = false;
-    List<Cell> reachedPathTiles = new List<Cell>();
-    List<Cell> path = new List<Cell>();
-    public Vector2 movePoint;
-    public LayerMask stopMovementMask;
-    public Vector2 movement;
-
-    //Private data
+    //private vars
+    Cell startCell;
+    Cell finishCell;
     float currentHealth;
-    int index;
+    List<Cell> myPath;
+    Cell currentSeekingCell;
+    bool foundPath = false;
+    bool reachedDest = false;
+    Rigidbody2D rb;
 
     // Start is called before the first frame update
     void Start()
     {
-        gridManager = GameObject.FindObjectOfType<GridManager>();
+        rb = GetComponent<Rigidbody2D>();
         currentHealth = maxHealth;
-        seekDestination = gridManager.GetCellWorldPosEnemy(this.transform.position);
-        index = 0;
-        setPath();
+        myPath = new List<Cell>();
+        currentSeekingCell = null;
+        myPath = new List<Cell>();
+
+        FindPathAStar();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(path != null)
-        {
-            if(path.Count <= 0)
-            {
-                Debug.Log("Path[0] Is Null");
-            }
-            else
-            {
-                movePoint = path[index].transform.position;
-            }
-        }
-
-        if (Vector2.Distance(this.transform.position, movePoint) >= 10.0f)
-        {
-            Debug.Log("Path Count: " + path.Count);
-            transform.position = Vector3.MoveTowards(transform.position, movePoint, moveSpeed * Time.fixedDeltaTime);
-        }
-        else if (path[index + 1] != seekDestination)
-        {
-            index++;
-        }
-        else
-        {
-            transform.position = Vector3.MoveTowards(transform.position, seekDestination.transform.position, moveSpeed * Time.fixedDeltaTime);
-        }
+        if (foundPath && !reachedDest)
+            FollowPath();
     }
 
     public void DealDamage(float damage)
@@ -68,69 +46,126 @@ public class EnemyBehavior : MonoBehaviour
 
         if (currentHealth <= 0f)
         {
-            enemyManager.MarkZombieDead();
+            enemyManager.MarkEnemyDead();
             Destroy(gameObject);
         }
     }
 
-    void setPath()
+    public void SetStartFinish(Cell start, Cell finish)
     {
-        Vector2 tempStart = new Vector2(this.transform.position.x, this.transform.position.y);
-        Cell tempStartCell = gridManager.GetCellWorldPosEnemy(tempStart);
-        Cell tempEndCell = seekDestination;
-        path = this.GetComponent<AStarSearch>().findPath(tempStartCell, tempEndCell);
+        startCell = start;
+        finishCell = finish;
     }
 
-    void SetMovementVector()
+    void FindPathAStar()
     {
-        //if (path != null)
-        //{
-        //    if (path.Count > 0)
-        //    {
-        //        if (!moveDone)
-        //        {
-        //            Debug.Log("Path Length: " + path.Count);
-        //            for (int i = 0; i < path.Count; i++)
-        //            {
-        //                if (reachedPathTiles.Contains(path[i]))
-        //                {
-        //                    continue;
-        //                }
-        //                else
-        //                {
-        //                    reachedPathTiles.Add(path[i]); 
-        //                    break;
-        //                }
-        //            }
+        //Open and closed lists
+        List<Cell> openList = new List<Cell>();
+        Dictionary<Cell, Cell> cameFrom = new Dictionary<Cell, Cell>();
+        Dictionary<Cell, float> costSoFar = new Dictionary<Cell, float>();
 
-        //            if(reachedPathTiles[reachedPathTiles.Count - 1] == null)
-        //            {
-        //                Debug.Log("Reached Path Tiles is null");
-        //            }
+        //Starting node on the open list
+        openList.Add(startCell);
+        cameFrom.Add(startCell, null);
+        costSoFar.Add(startCell, 0);
 
-        //            Cell wt = reachedPathTiles[reachedPathTiles.Count - 1];
+        Cell currentNode = null;
 
-        //            if(wt == null)
-        //            {
-        //                Debug.Log("WT is null");
-        //            }
-        //            Debug.Log(wt.ToString() +  " = X POS");
-        //            Debug.Log(wt.transform.position.y +  " = Y POS");
-        //            Debug.Log("Outputting Math: " + Mathf.Ceil(wt.transform.position.x - transform.position.x) + " = X POS\n" + Mathf.Ceil(wt.transform.position.y - transform.position.y) + " = Y POS");
-        //            lastDirection = new Vector3(Mathf.Ceil(wt.transform.position.x - transform.position.x), Mathf.Ceil(wt.transform.position.y - transform.position.y), 0);
-        //            if (lastDirection.Equals(Vector3.up)) movement.y = 1;
-        //            if (lastDirection.Equals(Vector3.down)) movement.y = -1;
-        //            if (lastDirection.Equals(Vector3.left)) movement.x = -1;
-        //            if (lastDirection.Equals(Vector3.right)) movement.x = 1;
-        //            moveDone = true;
-        //        }
-        //        else
-        //        {
-        //            movement = Vector2.zero;
-        //            if (Vector3.Distance(transform.position, movePoint.position) <= .001f)
-        //                moveDone = false;
-        //        }
-    //        }
-    //    }
+        while (openList.Count > 0)
+        {
+            //Starting node (front of openList)
+            currentNode = openList[0];
+            openList.RemoveAt(0);
+
+            //If we found the end node
+            if (currentNode == finishCell)
+            {
+                //Temp node
+                Cell tempNode = currentNode;
+
+                //"Trace" the path
+                while (tempNode != finishCell)
+                {
+                    //Add it to the path
+                    myPath.Add(tempNode);
+
+                    //Get where the temp node came from
+                    tempNode = cameFrom[tempNode];
+                }
+
+                //Early exit
+                foundPath = true;
+                return;
+            }
+
+            //Get the neighbours and add them to the cameFrom dictionary
+            List<Cell> neighborCells = currentNode.GetNeighbouringCells();
+            foreach (Cell neighbour in neighborCells)
+            {
+                //Calculate cost - costSoFar + neighbourCost + heuristicCost
+                float heuristicCost = (finishCell.transform.position - neighbour.transform.position).magnitude;
+                float estimatedCost = costSoFar[currentNode] + neighbour.cost + heuristicCost;
+
+                //If there is not cost for the neighbour
+                if (!costSoFar.ContainsKey(neighbour))
+                {
+                    //Set the new cost
+                    costSoFar.Add(neighbour, estimatedCost);
+
+                    //Add the neighbour to the openList
+                    openList.Add(neighbour);
+
+                    //Set where it came from
+                    cameFrom.Add(neighbour, currentNode);
+                }
+                else if (estimatedCost < costSoFar[neighbour])  //If we found a cheaper cost
+                {
+                    //Set the new cost
+                    costSoFar[neighbour] = estimatedCost;
+
+                    //Add the neighbour to the openList
+                    openList.Add(neighbour);
+
+                    //Set where it came from
+                    cameFrom[neighbour] = currentNode;
+                }
+            }
+        }
+    }
+
+    void FollowPath()
+    {
+        if(myPath.Count - 1 >= 0)
+        {
+            //Set the current seek node
+            currentSeekingCell = myPath[myPath.Count - 1];
+
+            //Move towards it
+            rb.velocity = (currentSeekingCell.transform.position - transform.position).normalized * moveSpeed;
+
+            //If close enough, continue
+            if (Vector2.Distance(transform.position, currentSeekingCell.transform.position) <= 0.5f)
+            {
+                //Check to see if the enemy has reached the destination
+                if (myPath.Count == 1)
+                {
+                    //Game Over
+                    //enemyManager.GameOver();
+                    enemyManager.MarkEnemyDead();
+                    Destroy(gameObject);
+                    reachedDest = true;
+                    enemyManager.subtractLife();
+                    return;
+                }
+
+                //Done with this node
+                myPath.RemoveAt(myPath.Count - 1);
+            }
+        }
+        else
+        {
+            Debug.Log("Path Length: " + myPath.Count);
+        }
+        
     }
 }

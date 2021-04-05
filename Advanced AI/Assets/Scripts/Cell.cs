@@ -7,34 +7,18 @@ using UnityEngine;
 public class Cell : MonoBehaviour
 {
     public float cost = 0f;
-
-    //Enemies in the cell
-    int enemiesInCell = 0;
-
-    public int gCost;
-    public int hCost;
-    public int gridX, gridY, cellX, cellY;
-    public bool walkable = true;
     public bool hasTower = false;
     public GameObject myTower;
-    public List<Cell> myNeighbours;
-    public Cell parent;
+    public GridManager gridManager;
+    public int myGridX;
+    public int myGridY;
+    int enemiesInCell = 0;
 
     public int EnemiesInCell { get { return enemiesInCell; } }
 
-    public Cell(bool _walkable, int _gridX, int _gridY)
+    private void Start()
     {
-        walkable = _walkable;
-        gridX = _gridX;
-        gridY = _gridY;
-    }
-
-    public int fCost
-    {
-        get
-        {
-            return gCost + hCost;
-        }
+        gridManager = FindObjectOfType<GridManager>();
     }
 
     public void IncreaseCost(float increaseAmount)
@@ -78,5 +62,50 @@ public class Cell : MonoBehaviour
         GUIStyle style = new GUIStyle(GUI.skin.label);
         style.alignment = TextAnchor.MiddleCenter;
         Handles.Label(transform.position, cost.ToString(), style);
+    }
+
+    public List<Cell> GetNeighbouringCells()
+    {
+        List<Cell> neighbours = new List<Cell>();
+        Vector2 cellPosition2D = new Vector2(transform.position.x, transform.position.y);
+        Vector2 dir;
+
+        //Go through all the directions
+        dir = new Vector2(0f, 1f);
+        Cell up = gridManager.GetCellAtPos(cellPosition2D + dir);
+
+        dir = new Vector2(0f, -1f);
+        Cell down = gridManager.GetCellAtPos(cellPosition2D + dir);
+
+        dir = new Vector2(-1f, 0f);
+        Cell left = gridManager.GetCellAtPos(cellPosition2D + dir);
+
+        dir = new Vector2(1f, 0f);
+        Cell right = gridManager.GetCellAtPos(cellPosition2D + dir);
+
+        dir = new Vector2(-1f, 1f);
+        Cell topLeft = gridManager.GetCellAtPos(cellPosition2D + dir);
+
+        dir = new Vector2(1f, 1f);
+        Cell topRight = gridManager.GetCellAtPos(cellPosition2D + dir);
+
+        dir = new Vector2(-1f, -1f);
+        Cell bottomLeft = gridManager.GetCellAtPos(cellPosition2D + dir);
+
+        dir = new Vector2(1f, -1f);
+        Cell bottomRight = gridManager.GetCellAtPos(cellPosition2D + dir);
+
+        //Add the cells to the list
+        neighbours.Add(up);
+        neighbours.Add(down);
+        neighbours.Add(left);
+        neighbours.Add(right);
+        neighbours.Add(topLeft);
+        neighbours.Add(topRight);
+        neighbours.Add(bottomLeft);
+        neighbours.Add(bottomRight);
+
+        //Return the list
+        return neighbours;
     }
 }

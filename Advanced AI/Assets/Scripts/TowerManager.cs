@@ -74,7 +74,7 @@ public class TowerManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Vector2 spawnPos = gridManager.GetCellWorldPos(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-            Cell holdCell = gridManager.GetCellWorldPosEnemy(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            Cell holdCell = gridManager.GetCellAtPos(Camera.main.ScreenToWorldPoint(Input.mousePosition));
             GameObject addTower = holdCell.gameObject;
             PlaceTower(spawnPos, addTower);
         }
@@ -183,7 +183,7 @@ public class TowerManager : MonoBehaviour
     {
         //Debug.Log("Selling Tower!!");
 
-        Cell checkForTower = gridManager.GetCellWorldPosEnemy(pos);
+        Cell checkForTower = gridManager.GetCellAtPos(pos);
         
         if (checkForTower.hasTower)
         {
