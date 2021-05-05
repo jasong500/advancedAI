@@ -5,6 +5,42 @@ TagManager:
   serializedVersion: 2
   tags:
   - enemy
+  - agent
+  - walkableSurface
+  - block
+  - wall
+  - goal
+  - ball
+  - purpleAgent
+  - blueAgent
+  - purpleGoal
+  - blueGoal
+  - target
+  - ground
+  - badFood
+  - food
+  - frozenAgent
+  - pit
+  - symbol_X_Goal
+  - symbol_O_Goal
+  - symbol_O
+  - symbol_X
+  - switchOff
+  - pyramid
+  - stone
+  - switchOn
+  - iWall
+  - ex
+  - key
+  - blockLarge
+  - blockSmall
+  - blockVeryLarge
+  - lock
+  - dragon
+  - portal
+  - tile
+  - plus
+  - score
   layers:
   - Default
   - TransparentFX
