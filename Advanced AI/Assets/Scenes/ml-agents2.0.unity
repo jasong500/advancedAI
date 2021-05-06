@@ -1770,14 +1770,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1909247395259330603, guid: fbe2b9862f3212146978338085aebf84, type: 3}
-      propertyPath: m_Model
-      value: 
-      objectReference: {fileID: 5022602860645237092, guid: 9a14505722a38aa44a828852abe3d553, type: 3}
-    - target: {fileID: 1909247395259330603, guid: fbe2b9862f3212146978338085aebf84, type: 3}
-      propertyPath: m_BehaviorType
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 8285291621318623596, guid: fbe2b9862f3212146978338085aebf84, type: 3}
       propertyPath: m_Name
       value: Level Holder Hide&Seek
